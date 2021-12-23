@@ -9,15 +9,17 @@ import {
   EyeIcon,
   EyeOffIcon
 } from "@heroicons/react/outline";
-import "./App.css";
-// import Video from "./component/VideoPlayer";
 
-
-// TODO: highlight unmuted screen
+// TODO: Get buttons on cards to look nice
+// TODO: Get VideoPlayer wired up
+//        - Play working
+//        - Mute working
 // TODO: When dragged to the right pause play
 // TODO: Button to pause and remove from main view
-// TODO: reset button
+// TODO: Box Size slider??????
+// TODO: Volume slider
 // TODO: error handling
+// If I get to this TODO then I can refactor or if I hit over 500 lines which ever comes first
 
 function App() {
   const { register, handleSubmit } = useForm();
@@ -67,8 +69,8 @@ function App() {
     }))}
     return (
       <div>
-        <button onClick={toggleGlobalMute}>Mute All <VolumeOffIcon className="h-5 w-5 text" /></button>
-      </div>
+        <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={toggleGlobalMute}><VolumeOffIcon className="h-10 w-10 text" /> Mute All</button>
+      </div>    
     );
   };
   // ResetViewButton
@@ -80,19 +82,15 @@ function App() {
       return updatedChannel
     }))}
     return (
-      <div>
-        <button onClick={ResetView}>
+      <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={ResetView}>        
+        <EyeIcon className="h-10 w-10 text" />          
         Reset View
-        <EyeIcon className="h-5 w-5 text" />          
-        </button>
-      </div>
+      </button>
     );
   };
 //=========================================================
 
 // TODO: On Hover show name of button
-// TODO: 
-
 //=========================================================
   // MuteButton
   const MuteButton = (props) => {
@@ -108,8 +106,8 @@ function App() {
       <div>
         <button onClick={toggleMuted}>
           {props.channel.isMuted 
-            ? <VolumeOffIcon className="h-5 w-5 text" />
-            : <VolumeUpIcon className="h-5 w-5 text-red-600" />
+            ? <VolumeOffIcon className="h-10 w-10 text" />
+            : <VolumeUpIcon className="h-10 w-10 text-red-600" />
           }
         </button>
       </div>
@@ -129,8 +127,8 @@ function App() {
       <div>
         <button onClick={togglePlay}>
           {props.channel.isPlaying
-            ? <PlayIcon className="h-5 w-5 text" />          
-            : <PauseIcon className="h-5 w-5 text" />
+            ? <PlayIcon className="h-10 w-10 text" />          
+            : <PauseIcon className="h-10 w-10 text" />
           }
         </button>
       </div>
@@ -150,8 +148,8 @@ function App() {
       <div>
         <button onClick={toggleView}>
         {props.channel.isVisable
-            ? <EyeIcon className="h-5 w-5 text" />          
-            : <EyeOffIcon className="h-5 w-5 text" />
+            ? <EyeIcon className="h-10 w-10 text" />          
+            : <EyeOffIcon className="h-10 w-10 text" />
         }
         </button>
       </div>
@@ -161,10 +159,14 @@ function App() {
 
   return (
     <div className="min-w-screen min-h-screen bg-gray-100">
-      <div className="bg-blue-200 py-6 flex items-center justify-center min-w-screen px-4">
-        {/* TODO: DRESS UP SEARCH BAR AND BUTTON  */}
-        <form onSubmit={handleSubmit(addChannel)}>
+      <div className="bg-blue-400 py-4 px-4"> 
+        {/* TODO: DRESS UP SEARCH BAR AND BUTTON  
+              If length > 3 min the search bar 
+        
+        */}
+        <form className="flex flex-row" onSubmit={handleSubmit(addChannel)}>
           <input
+            className="w-full rounded-tl-full rounded-bl-full py-4 px-4"
             placeholder="Channel Name"
             {...register("channelName", {
               required: true,
@@ -173,19 +175,18 @@ function App() {
               pattern: /^[a-zA-Z0-9_]{4,25}$/,
             })}
           />
-          <input type="submit" value="+ Add" />
+          <input className="bg-yellow-400 rounded-tr-full rounded-br-full hover:bg-red-300 py-4 px-4" type="submit" value="+ Add" />
         </form>
-        <div>
-          <ResetViewButton />
-          <GlobalMuteButton />
-        </div>
       </div>
-      <div className="grid grid-rows-4 grid-flow-col gap-x-2">
+      <div className="flex flex-row">
+        <ResetViewButton />
+        <GlobalMuteButton />
+      </div>
+      <div className="grid grid-col-6 grid-flow-col gap-x-2">
         {channelArray.map((channel) => (
-          // Card Container
+// Card Container ==========================================================================================
           <div
-            className={"transition duration-300 ease-in-out max-w-md py-4 px-8 bg-white rounded-lg my-5 shadow-sm transform hover:-translate-y-1 hover:shadow-xl " + (channel.isMuted ? '' : 'outline outline-offset-2 outline-blue-500')}
-            // outline outline-offset-2 outline-blue-500
+            className={"transition duration-300 ease-in-out max-w-md py-4 px-8 bg-white rounded-lg my-5 shadow-sm transform hover:-translate-y-1 hover:shadow-xl " + (channel.isMuted ? '' : 'outline-double outline-offset-2 outline-blue-500')}
             key={channel.id}
           >
             <div className="flex flex-row justify-between">
@@ -199,10 +200,13 @@ function App() {
                 <TrashIcon className="h-5 w-5 text-red-600" />
               </button>
             </div>
-            <div>
-              THIS HOLDS THE VIDEO
+{/* VIDEO PLAYER DIV  */}
+            <div 
+              className={(channel.isVisable ? 'show' : 'hidden')}
+            >
+              <img src="https://static-cdn.jtvnw.net/previews-ttv/live_user_nickmercs-440x248.jpg" alt="Apex Legends"/>
             </div>
-            <div>
+            <div className="flex flex-row justify-between">
                 <MuteButton channel={channel} />
                 <PlayButton channel={channel} />
                 <HideButton channel={channel} />

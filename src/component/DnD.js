@@ -4,17 +4,17 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 const finalSpaceCharacters = [
   {
     id: "rose",
-    name: "Rose Condello",
+    name: "Rose",
     thumb: "https://placekitten.com/g/200/300",
   },
   {
     id: "eleanor",
-    name: "Eleanor Condello",
+    name: "Eleanor",
     thumb: "https://placekitten.com/g/200/300",
   },
   {
     id: "amelia",
-    name: "Amelia Condello",
+    name: "Amelia",
     thumb: "https://placekitten.com/g/200/300",
   },
 ];
