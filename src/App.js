@@ -49,7 +49,7 @@ function App() {
     const toggleGlobalMute = () => {
       setChannelArray(prev => prev.map(c => {
       let updatedChannel = {...c};
-        updatedChannel.isMuted = true;      
+        updatedChannel.isMuted = true;
       return updatedChannel
     }))}
     return (
@@ -74,7 +74,16 @@ function App() {
     );
   };
 //=========================================================
-
+  const MuteCallback = (channelName) => {
+    const toggleMuted = () => {
+      setChannelArray(prev => prev.map(c => {
+        let updatedChannel = {...c};
+        if (updatedChannel.channelName === channelName) {
+          updatedChannel.isMuted = !updatedChannel.isMuted;
+        }
+        return updatedChannel
+      }))}
+  };
   return (
     <div className="min-w-screen min-h-screen bg-gray-100">
       <div className="bg-blue-400 py-4 px-4"> 
@@ -122,7 +131,7 @@ function App() {
             <div 
               className={(channel.isVisible ? 'show' : 'hidden')}
             >
-              <VideoPlayer channel={"shivfps"}/>
+              <VideoPlayer channel={channel.channelName} isMuted={channel.isMuted} isMutedCallback={MuteCallback}/>
             </div>
           </div>
         ))}

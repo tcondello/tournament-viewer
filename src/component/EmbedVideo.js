@@ -11,12 +11,14 @@ export default function VideoPlayer(prop) {
     controls: false,
     light: false,
     volume: 0.5,
-    muted: false,
+    muted: prop.isMuted,
     played: 0,
     loaded: 0,
     duration: 0,
     playbackRate: 1.0,
-    loop: false
+    loop: false,
+    width: '100%',
+    height: '100%'
   })
   // remember inline styles are passed via the style prop in ReactPlayer see Docs
   // how will I globally pass mute up to this component?
@@ -26,9 +28,13 @@ export default function VideoPlayer(prop) {
 //     setState(state, { volume: parseFloat(e.target.value) })
 //   }
 
+// FIGURE OUT HOW TO DO GLOBAL MUTE
+//
+
   const MuteButton = () => {
     const handleToggleMuted = () => {
       setState(prevState => ({...prevState, muted: !prevState.muted}))
+        prop.isMutedCallback(prop.channel)
     }
     return (
         <button onClick={handleToggleMuted}>
@@ -79,6 +85,9 @@ export default function VideoPlayer(prop) {
         <ReactPlayer {...state}/>
         <MuteButton />
         <PlayButton />
+        <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={() => setState(prevState => ({...prevState, url: null}))}>NULL it</button>
+        <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={() => setState(prevState => ({...prevState, url: "https://www.twitch.tv/"+ prop.channel}))}>Load it</button>
+          <h1>{prop.isMuted.toString()}</h1>
       </>
   );
 }
