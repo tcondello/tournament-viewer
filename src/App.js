@@ -12,7 +12,8 @@ import VideoPlayer from "./component/EmbedVideo";
 function App() {
   const { register, handleSubmit } = useForm();
   const [channelArray, setChannelArray] = useState([
-    { channelName: "channel1", id: 0, isMuted: true, isPlaying: true, isVisible: true }
+    { channelName: "tiffajessi", id: 0, isMuted: true, isPlaying: true, isVisible: true },
+    { channelName: "nessphace", id: 1, isMuted: true, isPlaying: true, isVisible: true }
   ]);
 
   // STATE FUNCTIONS
@@ -64,6 +65,7 @@ function App() {
       setChannelArray(prev => prev.map(c => {
       let updatedChannel = {...c};
         updatedChannel.isVisible = true;
+        updatedChannel.isPlaying = true;
       return updatedChannel
     }))}
     return (
@@ -74,16 +76,17 @@ function App() {
     );
   };
 //=========================================================
-  const MuteCallback = (channelName) => {
-    const toggleMuted = () => {
-      setChannelArray(prev => prev.map(c => {
-        let updatedChannel = {...c};
-        if (updatedChannel.channelName === channelName) {
-          updatedChannel.isMuted = !updatedChannel.isMuted;
-        }
-        return updatedChannel
-      }))}
+  const ToggleCallback = (channelName, property) => {
+    setChannelArray(prev => prev.map(c => {
+      let updatedChannel = {...c};
+      if (updatedChannel.channelName === channelName) {
+        updatedChannel[property] = !updatedChannel[property];
+      }
+      return updatedChannel
+    }))
   };
+//=========================================================
+
   return (
     <div className="min-w-screen min-h-screen bg-gray-100">
       <div className="bg-blue-400 py-4 px-4"> 
@@ -131,7 +134,13 @@ function App() {
             <div 
               className={(channel.isVisible ? 'show' : 'hidden')}
             >
-              <VideoPlayer channel={channel.channelName} isMuted={channel.isMuted} isMutedCallback={MuteCallback}/>
+              <VideoPlayer
+                  channelName={channel.channelName}
+                  isMuted={channel.isMuted}
+                  isVisible={channel.isVisible}
+                  isPlaying={channel.isPlaying}
+                  ToggleCallback={ToggleCallback}
+              />
             </div>
           </div>
         ))}
